@@ -12,16 +12,29 @@ h1 {
 font-size: 2em;
 margin: 1em;
 }
-section, div {
+section {
 margin: 2em;
 }
-button, input {
+button, input, div {
 background-color:rgba(250,216,250,.2);
 border: 1px solid rgb(243,165,243);
 color: rgb(99,14,99);
 font-size: 1em;
 padding: .5em;
 }
+input {
+text-align: center;
+margin-right: 1.5em;
+width: 150px;
+}
+button {
+width: 100px;
+}
 button:hover {
 background-color:rgba(250,216,250.7);
+}
+div {
+display: none;
+margin: 2em auto;
+width: 200px;
 }
