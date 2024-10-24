@@ -1,0 +1,53 @@
+* {
+margin: 0;
+padding: 0;
+}
+body {
+background-color: rgb(252,234,252);
+color: rgb(82,11,82);
+font-family: Arial;
+text-align: center;
+}
+h1 {
+font-size: 2em;
+margin: 1em;
+}
+section {
+margin: 2em;
+}
+button, input, div {
+background-color:rgba(250,216,250,.2);
+border: 1px solid rgb(243,165,243);
+color: rgb(99,14,99);
+font-size: 1em;
+padding: .5em;
+}
+input {
+margin-bottom: .5em;
+width: 150px;
+text-align: center;
+}
+.display {
+border: 0;
+display: inline-block;
+margin: auto;
+width: 180px;
+}
+div {
+margin: auto;
+text-align: justify;
+max-width: 500px;
+width: 90%;
+}
+button {
+margin: 1em .5em 1em;
+width: 100px;
+}
+button:hover {
+background-color:rgba(250,216,250.7);
+}
+#tip {
+padding: 5px;
+position: absolute;
+visibility: hidden;
+}
