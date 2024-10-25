@@ -24,14 +24,14 @@ padding: .5em;
 }
 input {
 margin-bottom: .5em;
-width: 150px;
+width: 100px;
 text-align: center;
 }
 .display {
 border: 0;
 display: inline-block;
 margin: auto;
-width: 180px;
+width: 125px;
 }
 div {
 margin: auto;
@@ -46,8 +46,24 @@ width: 100px;
 button:hover {
 background-color:rgba(250,216,250.7);
 }
+#purchase-btn {
+font-weight: bold;
+}
+#display-cid {
+border: 0;
+margin: 0 auto;
+padding: 0;
+max-width: 520px;
+}
+#solution {
+display: none;
+}
+#solution {
+margin: 1em auto;
+}
 #tip {
 padding: 5px;
 position: absolute;
 visibility: hidden;
+width: auto;
 }
