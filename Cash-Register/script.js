@@ -15,7 +15,7 @@ const test = [
 [100, 3.26, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]],
 [20, 19.5, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]],
 [20, 19.5, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]],
-[20, 19.5, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]]
+[20, 19.5, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]],
 ];
 let cash = displayCash.value, price = displayPrice.value, cid = test[0][2], cidBefore, t, btn;
 const amount = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
@@ -68,7 +68,7 @@ const reset = () => {
 reset();
 purchaseBtn.addEventListener("click", () => {
 	if (btn === 0) {
-		let chd = [], d = 0, d1 = 0, m = 0, n = 0;
+		let chd = [], d = 0, d1 = 0, m = 0, n = 0, sol = "";
 		if (cashValue() < priceValue()) {
 			alert("Customer does not have enough money to purchase the item.");
 		}
@@ -77,6 +77,7 @@ purchaseBtn.addEventListener("click", () => {
 		}
 		else {
 			let due = (cashValue() - priceValue()) * 100;
+			sol += "Cash: $" + cashValue() + "\t" + "Price: $" + priceValue();
 			for (const x in cid) {
 				const coinsBills = () => {
 					if (n > 0) {
@@ -90,8 +91,13 @@ purchaseBtn.addEventListener("click", () => {
 						m -= amount[x];
 						n += v;
 						cid[x][1] = roundToTwoDecimalPlaces(cid[x][1] - v);
+						const min = () => {if (m/100 < 0) {return (m/100 * (-1)).toFixed(2);} return (m/100).toFixed(2);}
+						sol += "\n$" + (due/100).toFixed(2) + "\t\t$" + (amount[x]/100).toFixed(2) + "\t" + Math.round(m / amount[x]) + "\t$" + min() + "\t\t$"  + n.toFixed(2);
 						i--;
 					}
+				}
+				const fs = () => {
+					return sol += "\n-------------------------------------------------------" + "\n$" + (due/100).toFixed(2) + "\t\t$" + (amount[x]/100).toFixed(2) + "\t" + Math.round(d1) + "\t$" + (m/100).toFixed(2) + "\t\t$"  + n.toFixed(2);
 				}
 				let v = roundToTwoDecimalPlaces(amount[x]/100);
 				m = roundToTwoDecimalPlaces(cid[x][1]) * 100;
@@ -99,15 +105,19 @@ purchaseBtn.addEventListener("click", () => {
 					d = Math.floor(due / amount[x]);
 					d1 = m / amount[x];
 					if (d * amount[x] > m) {
+						fs();
 						item(d1);
 						coinsBills(n);
+						
 					}
 					else {
+						fs();
 						item(d);
 						coinsBills(n);
 					}
 				}
 			}
+			sol += "\n-------------------------------------------------------" + "\n\t\t\t\t\t" + "Due:" + "\t$" + (cashValue() - priceValue()).toFixed(2);
 			if (cidBefore !== sumArray(chd) && cashValue() - priceValue() === sumArray(chd)) {
 				changeDue.innerText = "Status: OPEN\n" + status(chd);
 			}
@@ -121,7 +131,7 @@ purchaseBtn.addEventListener("click", () => {
 		if (cashValue() !== "" && cashValue() >= priceValue()) {
 			displayDue.value = roundToTwoDecimalPlaces(cashValue() - priceValue());
 		}
-		displaySolution.innerText = "Below you will find more details.\n\n";
+		displaySolution.innerHTML = "<p>Below you will find more details.</p>" + "<pre>" + sol + "</pre>";
 		displaySolution.style.display = "block";
 		btn++;
 	}
@@ -166,4 +176,5 @@ testBtn.addEventListener("click", () => {
 });
 resetBtn.addEventListener("click", () => {
 	reset();
+	location.reload();
 });
