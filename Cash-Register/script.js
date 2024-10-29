@@ -1,3 +1,5 @@
+const test = [[20, 1.87, [['PENNY', 1.01], ['NICKEL', 2.05], ['DIME', 3.1], ['QUARTER', 4.25], ['ONE', 90], ['FIVE', 55], ['TEN', 20], ['TWENTY', 60], ['ONE HUNDRED', 100]]], [20, 19.5, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]], [100, 3.26, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]], [20, 19.5, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]], [20, 19.5, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]], [20, 19.5, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]]];
+let cash = test[0][0], price = test[0][1], cid = test[0][2], t;
 const displayCash = document.getElementById("cash");
 const displayPrice = document.getElementById("display-price");
 const displayDue = document.getElementById("display-due");
@@ -9,132 +11,129 @@ const displayCID = document.getElementById("display-cid");
 const displayTotalCashInDrawer = document.getElementById("total-cash-in-drawer");
 const displaySolution = document.getElementById("solution");
 const tip = document.getElementById("tip");
-const test = [
-[20, 1.87, [['PENNY', 1.01], ['NICKEL', 2.05], ['DIME', 3.1], ['QUARTER', 4.25], ['ONE', 90], ['FIVE', 55], ['TEN', 20], ['TWENTY', 60], ['ONE HUNDRED', 100]]],
-[20, 19.5, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]],
-[100, 3.26, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]],
-[20, 19.5, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]],
-[20, 19.5, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]],
-[20, 19.5, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]],
-];
-let cash = displayCash.value, price = displayPrice.value, cid = test[0][2], cidBefore, t, btn;
-const amount = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
-const reverseCID = d => {
+const sumArray = a => {
+	let y = 0;
+	for (const x in a) {
+		y += a[x][1];
+	}
+	return Number(y.toFixed(2));
+}
+const reverse = type => {
 	let r = [];
-	for (const x in test[d][2]) {
-		r.unshift(test[d][2][x]);
+	for (const x in type) {
+		r.unshift([type[x][0], type[x][1]]);
 	}
 	return r;
 }
-const cashValue = () => {
-	return displayCash.value * 1;
-}
-const priceValue = () => {
-	return displayPrice.value * 1;
-}
-const roundToTwoDecimalPlaces = num => {
-	return Math.round((num + Number.EPSILON) * 100) / 100;
-}
-const sumArray = data => {
-	let sum = 0;
-	for (const x in data) {
-		sum += data[x][1];
+const statusBefore = s => {
+	let str = "";
+	for (const x in s) {
+		str += " " + s[x][0] + ": $" + s[x][1];
 	}
-	return roundToTwoDecimalPlaces(sum);
-}
-const status = a => {
-	let s = "";
-	for (const x in a) {
-		s +=  a[x][0] + ": " + "$"+a[x][1] + ", ";
-	}
-	return s;
+	return str;
 }
 const reset = () => {
-	cid = reverseCID(0);
-	cidBefore = sumArray(cid);
 	displayCash.value = test[0][0];
 	displayPrice.value = test[0][1];
 	displayDue.value = "";
 	changeDue.innerText = "Status: READY";
 	displayCID.innerText = "Total cash in drawer: $" + sumArray(cid);
-	displayTotalCashInDrawer.innerText = status(cid);
+	displayTotalCashInDrawer.innerText = statusBefore(reverse(cid));
 	displaySolution.innerText = "";
 	displaySolution.style.display = "none";
 	resetBtn.innerText = "Reset";
 	testBtn.innerText = "Test";
-	t = 0;
-	btn = 0;
 }
 reset();
 purchaseBtn.addEventListener("click", () => {
-	if (btn === 0) {
-		let chd = [], d = 0, d1 = 0, m = 0, n = 0, sol = "";
-		if (cashValue() < priceValue()) {
-			alert("Customer does not have enough money to purchase the item.");
+	const cashValue = () => {
+		return displayCash.value * 1;
+	}
+	const priceValue = () => {
+		return price * 1;
+	}
+	let change = [], sol = "";
+	if (cashValue() !== "" && cashValue() >= priceValue()) {
+		displayDue.value = cashValue() - priceValue();
+	}
+	const status = type => {
+		let str = "";
+		for (const x in type) {
+			str += " " + type[x][0] + ": $" + type[x][1];
 		}
-		else if (cashValue() === priceValue()) {
-			changeDue.innerText = "No change due - customer paid with exact cash.";
+		return str;
+	}
+	displayCID.innerText = "Total cash in drawer: $" + sumArray(cid);
+	displayTotalCashInDrawer.innerText = status(reverse(cid));
+	displayTotalCashInDrawer.style.display = "block";
+	if (priceValue() > cashValue()) {
+		alert("Customer does not have enough money to purchase the item");
+	}
+	else if (cashValue() === priceValue()) {
+		changeDue.innerText = "No change due - customer paid with exact cash";
+	}
+	else {
+		let reverseCID = [];
+		for (const x in cid) {
+			reverseCID.unshift([cid[x][0], cid[x][1]]);
 		}
-		else {
-			let due = (cashValue() - priceValue()) * 100;
-			sol += "Cash: $" + cashValue() + "\t" + "Price: $" + priceValue();
-			for (const x in cid) {
-				const coinsBills = () => {
-					if (n > 0) {
-						chd.push([cid[x][0], roundToTwoDecimalPlaces(n)]);
+		const amount = [ 10000, 2000, 1000, 500, 100, 25, 10, 5, 1 ];
+		let due = cashValue() - priceValue();
+		let dueOne = Math.round(due * 100);
+		const line = "-".repeat(55);
+		sol += "Cash: $" + cashValue() + "\t" + "Price: $" + priceValue() + "\n" + line;
+		for (const x in reverseCID) {
+			let dueChk = (dueOne % amount[x]);
+			let dueAmo = Math.floor(dueOne / amount[x]);
+			let cidOne = Math.round(reverseCID[x][1] * 100);
+			let cidAmo = Math.floor(cidOne / amount[x]);
+			let cidF1 = Number(((amount[x]/100) * dueAmo).toFixed(2));
+			let cidF2 = Number(((amount[x]/100) * cidAmo).toFixed(2));
+			if (dueChk !== dueOne) {
+				if (cidAmo > dueAmo) {
+					sol += "\n$" + dueOne/100 + "\t\t$" + amount[x]/100 + "\t" + dueAmo + "\t$" + reverseCID[x][1];
+					dueOne -= (amount[x] * dueAmo);
+					reverseCID[x][1] -= ((amount[x]/100) * dueAmo);
+					sol += "\n$" + dueOne/100 + "\t\t\t\t$" + reverseCID[x][1] + "\t\t$" + cidF1 + "\n" + line;
+					if (cidF1 > 0) {
+						change.push([reverseCID[x][0], cidF1]);
 					}
-					n = 0;
 				}
-				const item = i => {
-					while (i > 0) {
-						due -= amount[x];
-						m -= amount[x];
-						n += v;
-						cid[x][1] = roundToTwoDecimalPlaces(cid[x][1] - v);
-						const min = () => {if (m/100 < 0) {return (m/100 * (-1)).toFixed(2);} return (m/100).toFixed(2);}
-						sol += "\n$" + (due/100).toFixed(2) + "\t\t$" + (amount[x]/100).toFixed(2) + "\t" + Math.round(m / amount[x]) + "\t$" + min() + "\t\t$"  + n.toFixed(2);
-						i--;
+				else {
+					if (cidAmo > 0) {
+						sol += "\n$" + dueOne/100 + "\t\t$" + amount[x]/100 + "\t" + cidAmo + "\t$" + reverseCID[x][1];
 					}
-				}
-				const fs = () => {
-					return sol += "\n-------------------------------------------------------" + "\n$" + (due/100).toFixed(2) + "\t\t$" + (amount[x]/100).toFixed(2) + "\t" + Math.round(d1) + "\t$" + (m/100).toFixed(2) + "\t\t$"  + n.toFixed(2);
-				}
-				let v = roundToTwoDecimalPlaces(amount[x]/100);
-				m = roundToTwoDecimalPlaces(cid[x][1]) * 100;
-				if (due % amount[x] !== due) {
-					d = Math.floor(due / amount[x]);
-					d1 = m / amount[x];
-					if (d * amount[x] > m) {
-						fs();
-						item(d1);
-						coinsBills(n);
-						
-					}
-					else {
-						fs();
-						item(d);
-						coinsBills(n);
+					dueOne -= (amount[x] * cidAmo);
+					reverseCID[x][1] -= ((amount[x]/100) * cidAmo);
+					if (cidF2 > 0) {
+						sol += "\n$" + dueOne/100 + "\t\t\t\t$" + reverseCID[x][1] + "\t\t$" + cidF2 + "\n" + line;
+						change.push([reverseCID[x][0], cidF2]);
 					}
 				}
 			}
-			sol += "\n-------------------------------------------------------" + "\n\t\t\t\t\t" + "Due:" + "\t$" + (cashValue() - priceValue()).toFixed(2);
-			if (cidBefore !== sumArray(chd) && cashValue() - priceValue() === sumArray(chd)) {
-				changeDue.innerText = "Status: OPEN\n" + status(chd);
-			}
-			else if (cidBefore === sumArray(chd) && cashValue() - priceValue() === sumArray(chd)) {
-				changeDue.innerText = "Status: CLOSED\n" + status(chd);
+		}
+		sol += "\n\t\t\t\t\t" + "Due:" + "\t$" + (cashValue() - priceValue()).toFixed(2);
+		const statusOpen = () => {
+			return changeDue.innerText = "Status: OPEN" + status(change);
+		}
+		const statusClosed = () => {
+			return changeDue.innerText = "Status: CLOSED" + status(change);
+		}
+		let cp = ((cashValue() - priceValue()).toFixed(2)) * 1;
+		if (cp === sumArray(change)) {
+			if (sumArray(reverseCID) === 0) {
+				statusClosed();
 			}
 			else {
-				changeDue.innerText = "Status: INSUFFICIENT_FUNDS";
+				statusOpen();
 			}
 		}
-		if (cashValue() !== "" && cashValue() >= priceValue()) {
-			displayDue.value = roundToTwoDecimalPlaces(cashValue() - priceValue());
+		else {
+			return changeDue.innerText = "Status: INSUFFICIENT_FUNDS";
 		}
-		displaySolution.innerHTML = "<p>Below you will find more details.</p>" + "<pre>" + sol + "</pre>";
-		displaySolution.style.display = "block";
-		btn++;
 	}
+	displaySolution.innerHTML = "<p>Below you will find more details.</p>" + "<pre>" + sol + "</pre>";
+	displaySolution.style.display = "block";
 });
 const tooltip = (id, text) => {
 	id.addEventListener("mouseover", () => {
@@ -154,15 +153,18 @@ tooltip(displayPrice, "The price of the item.");
 tooltip(displayDue, "Refund of change to the customer based on the price of the item.");
 tooltip(displayTotalCashInDrawer, "The amount of cash in the cash drawer.");
 const numberOfTest = () => {
-	displayCash.value = test[t][0];
-	displayPrice.value = test[t][1];
+	cash = test[t][0];
+	price = test[t][1];
+	cid = test[t][2];
+	displayCash.value = cash;
+	displayPrice.value = price;
 	displayDue.value = "";
-	cid = reverseCID(t);
-	cidBefore = sumArray(cid);
 	displayCID.innerText = "Total cash in drawer: $" + sumArray(cid);
-	displayTotalCashInDrawer.innerText = status(cid);
+	displayTotalCashInDrawer.innerText = statusBefore(reverse(cid));
+	displayTotalCashInDrawer.style.display = "block";
+	displaySolution.innerText = "";
+	displaySolution.style.display = "none";
 	testBtn.innerText = "Test " + t;
-	btn = 0;
 }
 testBtn.addEventListener("click", () => {
 	t++;
@@ -174,7 +176,7 @@ testBtn.addEventListener("click", () => {
 		numberOfTest(t);
 	}
 });
-resetBtn.addEventListener("click", () => {
+resetBtn.addEventListener("click", () => {	
 	reset();
 	location.reload();
 });
