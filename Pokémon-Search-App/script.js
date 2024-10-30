@@ -1,13 +1,14 @@
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-button");
-searchInput.value = "Red";
-if (searchInput.value === "Red") {
-	searchBtn.addEventListener("click", () => {
+fetch("https://pokeapi-proxy.freecodecamp.rocks/api/pokemon")
+.then((res) => res.json())
+.then((data) => {console.log(data.results)})
+.catch((err) => console.error(err))
+searchBtn.addEventListener("click", () => {
+	if (searchInput.value === "Red") {
 		alert("Pokémon not found");
-	});
-}
-else if (searchInput.value === "Pikachu") {
-	searchBtn.addEventListener("click", () => {
+	}
+	else {
 		alert("Pokémon is found");
-	});
-}
+	}
+});
