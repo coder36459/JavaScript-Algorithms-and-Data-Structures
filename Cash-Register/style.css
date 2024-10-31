@@ -12,10 +12,15 @@ h1 {
 font-size: 2em;
 margin: 1em;
 }
-section {
-margin: 2em;
+a {
+font-weight: bold;
+text-decoration: none;
+color: rgb(82,11,82);
 }
-button, input, div {
+#section {
+margin: 2em auto;
+}
+button, input, .display, #change-due, #display-cid, #total-cash-in-drawer, #solution, #tip {
 background-color:rgba(250,216,250,.2);
 border: 1px solid rgb(243,165,243);
 color: rgb(99,14,99);
@@ -31,9 +36,13 @@ text-align: center;
 border: 0;
 display: inline-block;
 margin: auto;
+text-align: left;
 width: 125px;
 }
-div {
+#display-price, #display-due, #change-due, #total-cash-in-drawer, #solution {
+cursor: not-allowed;
+}
+#change-due, #display-cid, #total-cash-in-drawer, #solution, #tip {
 margin: auto;
 text-align: left;
 max-width: 500px;
@@ -74,11 +83,14 @@ position: absolute;
 visibility: hidden;
 width: auto;
 }
+footer {
+margin: 2em 0 3em;
+}
 @media screen and (max-width: 600px) {
-#div {
+.display, #change-due, #display-cid, #total-cash-in-drawer, #solution, #tip {
 width: 100%;
 }
-section {
+#section {
 margin: 0;
 }
 }
