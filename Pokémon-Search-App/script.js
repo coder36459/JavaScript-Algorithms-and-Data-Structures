@@ -14,27 +14,29 @@ const specialDefense = document.getElementById("special-defense");
 const speed = document.getElementById("speed");
 searchBtn.addEventListener("click", () => {
 	let item = (searchInput.value).toLowerCase();
-	console.log(item)
+	//console.log(item)
 	fetch(resourcesURL)
 	.then((res) => res.json())
 	.then((data) => resourcesArray(data.results, item))
 	.catch((err) => console.error(err));
 	const resourcesArray = (data, item) => {
-		const check = (ch) => {
+		const check = (ch, i) => {
 			if (ch < 0) {
 				alert("Pokémon not found");
+				console.log(i);
 			}
 			else {
 				alert("Pokémon is found");
+				console.log(i);
 			}
 		}
 		if (Number.isInteger(searchInput.value * 1)) {
 			let checkID = data.map(e => e.id).indexOf(Number(item));
-			check(checkID);
+			check(checkID, item);
 		}
 		else {
 			let checkName = data.map(e => e.name).indexOf(item);
-			check(checkName);
+			check(checkName, item);
 		}
 	}
 });
