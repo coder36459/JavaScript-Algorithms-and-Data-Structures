@@ -10,22 +10,29 @@
 		<main>
 			<header>
 				<h1>Pokémon Search App</h1>
+				<p>Search for Pokémon by name or ID</p>
 			</header>
-			<div>
+			<div id="search">
 				<input type="text" id="search-input" required>
 				<button type="button" id="search-button">Search</button>
-				<div id="pokemon-name"></div>
-				<div id="pokemon-id"></div>
-				<div id="weight"></div>
-				<div id="height"></div>
-				<div id="types"></div>
-				<div id="hp"></div>
-				<div id="attack"></div>
-				<div id="defense"></div>
-				<div id="special-attack"></div>
-				<div id="special-defense"></div>
-				<div id="speed"></div>
+			</div>
+			<div id="results">
 				<div id="sprites-img"></div>
+				<div id="details">
+					<div class="label">Name: <span id="pokemon-name"></span></div>
+					<div class="label">ID: <span id="pokemon-id"></span></div>
+					<div class="label">Weight: <span id="weight"></span></div>
+					<div class="label">Height: <span id="height"></span></div>
+					<div class="label">Types: <span id="types"></span></div>
+				</div>
+				<div id="stats">
+					<div class="label">HP: <span id="hp"></span></div>
+					<div class="label">Attack: <span id="attack"></span></div>
+					<div class="label">Defense: <span id="defense"></span></div>
+					<div class="label">Special attack: <span id="special-attack"></span></div>
+					<div class="label">Special defense: <span id="special-defense"></span></div>
+					<div class="label">Speed: <span id="speed"></span></div>
+				</div>
 			</div>
 		</main>
 		<script src="script.js"></script><noscript>Your browser does not support JavaScript!</noscript>
