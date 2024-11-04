@@ -13,9 +13,15 @@ const specialAttack = document.getElementById("special-attack");
 const specialDefense = document.getElementById("special-defense");
 const speed = document.getElementById("speed");
 const spritesIMG = document.getElementById("sprites-img");
+const results = document.getElementById("results");
+const reset = () => {
+results.style.display = "none";
+types.innerText = "";
+}
+reset();
 searchBtn.addEventListener("click", () => {
+	reset();
 	let item = (searchInput.value).toLowerCase();
-	//console.log(item)
 	fetch(resourcesURL)
 	.then((res) => res.json())
 	.then((data) => resourcesArray(data.results, item))
@@ -24,7 +30,6 @@ searchBtn.addEventListener("click", () => {
 		const check = (ch, i) => {
 			if (ch < 0) {
 				alert("Pokémon not found");
-				console.log(i);
 			}
 			else {
 				alert("Pokémon is found");
@@ -36,7 +41,12 @@ searchBtn.addEventListener("click", () => {
 					pokemonID.innerText = data["id"];
 					weight.innerText = data["weight"];
 					height.innerText = data["height"];
-					types.innerText = (data["types"][0]["type"]["name"]).toUpperCase();
+					if (data["types"].length === 1) {
+						types.innerHTML = `<span class="type-${data["types"][0]["type"]["name"]}">${(data["types"][0]["type"]["name"]).toUpperCase()}</span>`;
+					}
+					else if (data["types"].length === 2) {
+						types.innerHTML = `<span class="type-${data["types"][0]["type"]["name"]}">${(data["types"][0]["type"]["name"]).toUpperCase()}</span><span class="type-${data["types"][1]["type"]["name"]}">${(data["types"][1]["type"]["name"]).toUpperCase()}</span>`;
+					}
 					hp.innerText = data["stats"][0]["base_stat"];
 					attack.innerText = data["stats"][1]["base_stat"];
 					defense.innerText = data["stats"][2]["base_stat"];
@@ -44,21 +54,9 @@ searchBtn.addEventListener("click", () => {
 					specialDefense.innerText = data["stats"][4]["base_stat"];
 					speed.innerText = data["stats"][5]["base_stat"];
 					spritesIMG.innerHTML = `<img id="sprite" src="${data["sprites"]["front_default"]}">`;
-					console.log("pokemon-name", data["name"])
-					console.log("pokemon-id", data["id"])
-					console.log("weight", data["weight"])
-					console.log("height", data["height"])
-					console.log("hp", data["stats"][0]["base_stat"])
-					console.log("attack", data["stats"][1]["base_stat"])
-					console.log("defense", data["stats"][2]["base_stat"])
-					console.log("special-attack", data["stats"][3]["base_stat"])
-					console.log("special-defense", data["stats"][4]["base_stat"])
-					console.log("speed", data["stats"][5]["base_stat"])
-					console.log("types", data["types"][0]["type"]["name"])
-					console.log("sprites", data["sprites"]["front_default"])
+
 					})
 				.catch((err) => console.error(err));
-				console.log(resourcesURLNameOrID);
 			}
 		}
 		if (Number.isInteger(searchInput.value * 1)) {
@@ -70,4 +68,5 @@ searchBtn.addEventListener("click", () => {
 			check(checkName, item);
 		}
 	}
+	results.style.display = "flex";
 });
