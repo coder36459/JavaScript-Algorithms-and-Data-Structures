@@ -41,12 +41,14 @@ searchBtn.addEventListener("click", () => {
 					pokemonID.innerText = data["id"];
 					weight.innerText = data["weight"];
 					height.innerText = data["height"];
-					if (data["types"].length === 1) {
-						types.innerHTML = `<span class="type-${data["types"][0]["type"]["name"]}">${(data["types"][0]["type"]["name"]).toUpperCase()}</span>`;
+					const type = (len) => {
+						let str = "";
+						for (let i = 0; i < len; i++) {
+							str += '<span class="type-' + data["types"][i]["type"]["name"] + '">' + (data["types"][i]["type"]["name"]).toUpperCase() + '</span>'
+						}
+						return types.innerHTML = str;
 					}
-					else if (data["types"].length === 2) {
-						types.innerHTML = `<span class="type-${data["types"][0]["type"]["name"]}">${(data["types"][0]["type"]["name"]).toUpperCase()}</span><span class="type-${data["types"][1]["type"]["name"]}">${(data["types"][1]["type"]["name"]).toUpperCase()}</span>`;
-					}
+					type(data["types"].length);
 					hp.innerText = data["stats"][0]["base_stat"];
 					attack.innerText = data["stats"][1]["base_stat"];
 					defense.innerText = data["stats"][2]["base_stat"];
@@ -54,7 +56,6 @@ searchBtn.addEventListener("click", () => {
 					specialDefense.innerText = data["stats"][4]["base_stat"];
 					speed.innerText = data["stats"][5]["base_stat"];
 					spritesIMG.innerHTML = `<img id="sprite" src="${data["sprites"]["front_default"]}">`;
-
 					})
 				.catch((err) => console.error(err));
 			}
